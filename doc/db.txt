@@ -1,0 +1,23 @@
+tables:
+attachments:附件
+changes:issue_id,field,old,new,by,time
+comments:issue_id,text,by,time
+issues_ext_launchpad
+issues_log_launchpad
+issues_watchers
+people:
+people_uidentities
+related_to
+supported_tracers
+trackers
+
+mysql> create table events(id bigint auto_increment primary key,issue_id int(10) unsigned,field_id int(10) unsigned,field varchar(64),changed_by int(10) unsigned,changed_on datetime);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into events(issue_id,field_id,field,changed_by,changed_on) select issue_id,id,field,changed_by,changed_on from changes;
+Query OK, 1006351 rows affected (4.18 sec)
+Records: 1006351  Duplicates: 0  Warnings: 0
+
+mysql> insert into events(issue_id,field_id,field,changed_by,changed_on) select issue_id,id,'comment',submitted_by,submitted_on from comments;
+Query OK, 341886 rows affected (1.25 sec)
+Records: 341886  Duplicates: 0  Warnings: 0
